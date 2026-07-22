@@ -1,0 +1,16 @@
+# =====================================================
+# Bela-Pillage - messages.yml
+# Tous les messages du plugin. Codes couleur Minecraft (&) supportes.
+# =====================================================
+
+potato-check:
+  # {block} = nom d'affichage du bloc (ex: Obsidienne)
+  # {current} = durabilite restante, {max} = durabilite maximale
+  result: |
+    &6&l{block}
+    &7Durabilité : &a{current} &7/ &a{max}
+
+general:
+  no-permission: "&cVous n'avez pas la permission d'utiliser cette commande."
+  reload-success: "&aConfiguration de Bela-Pillage rechargée."
+  player-only: "&cCette commande est réservée aux joueurs."
