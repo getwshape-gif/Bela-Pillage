@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>fr.belarion</groupId>
+    <artifactId>Bela-Pillage</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>Bela-Pillage</name>
+    <description>
+        Gere la durabilite des blocs premium (Obsidienne, Enclume, Table d'Enchantement, ...)
+        face aux explosions pendant les pillages de factions, sans jamais toucher au
+        fonctionnement vanilla du minage. Verification de la durabilite restante via une
+        patate (clic droit/gauche) sur un bloc situe en territoire ennemi (API SaberFactions).
+        Respecte scrupuleusement les blocs deja proteges par Bela-Customs (Coffre en Emeraude,
+        Bloc d'Emeraude Renforce, Table d'Enchantement Emeraude, Enclume Emeraude) : aucun
+        recouvrement de materiau, donc aucune interference possible avec ces blocs.
+    </description>
+
+    <properties>
+        <!--
+            Comme Bela-Customs : cible Java 8 pour rester compatible avec le coeur
+            Spigot 1.8.8 sur un serveur qui n'aurait pas encore ete mis a jour vers
+            Java 17+ (contrairement a BelarionFactions, ce plugin n'utilise pas
+            ProtocolLib et n'a donc aucune raison d'exiger un JDK plus recent).
+        -->
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <repositories>
+        <!-- API serveur Spigot/Bukkit -->
+        <repository>
+            <id>spigotmc-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <!-- Miroir public hebergeant net.md-5:bungeecord-chat:1.8-SNAPSHOT (dependance
+             transitive de spigot-api, introuvable sur hub.spigotmc.org pour cette vieille
+             version 1.8 - meme necessite que dans BelarionFactions). -->
+        <repository>
+            <id>elmakers-repo</id>
+            <url>https://maven.elmakers.com/repository/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.8.8-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.md-5</groupId>
+                    <artifactId>bungeecord-chat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!--
+            SaberFactions.jar n'est pas publie sur un depot Maven public (plugin premium).
+            Meme mecanisme que BelarionFactions : reference en scope "system" a partir du
+            jar fourni dans /libs, uniquement pour compiler contre son API publique
+            (com.massivecraft.factions.*). Ce jar n'est jamais modifie ni redistribue par
+            ce build : a l'execution, c'est le SaberFactions.jar deja installe sur le
+            serveur qui est utilise.
+        -->
+        <dependency>
+            <groupId>com.massivecraft</groupId>
+            <artifactId>factions</artifactId>
+            <version>1.6.9.5-4.1.9</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/SaberFactions.jar</systemPath>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.name}</finalName>
+        <defaultGoal>package</defaultGoal>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
