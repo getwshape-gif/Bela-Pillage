@@ -37,12 +37,14 @@ public final class PillageConfig {
     public static final class ManagedByOtherPlugin {
         private final String displayName;
         private final Material icon;
+        private final short iconData;
         private final String resistanceDisplay;
         private final boolean insensible;
 
-        ManagedByOtherPlugin(String displayName, Material icon, String resistanceDisplay, boolean insensible) {
+        ManagedByOtherPlugin(String displayName, Material icon, short iconData, String resistanceDisplay, boolean insensible) {
             this.displayName = displayName;
             this.icon = icon;
+            this.iconData = iconData;
             this.resistanceDisplay = resistanceDisplay;
             this.insensible = insensible;
         }
@@ -53,6 +55,15 @@ public final class PillageConfig {
 
         public Material getIcon() {
             return icon;
+        }
+
+        /**
+         * Valeur de donnee (sous-id) legacy 1.8 de l'icone, par exemple 2 pour obtenir la
+         * texture "prismarine_dark" (dark prismarine) sur un Material.PRISMARINE plutot que
+         * la texture "rough prismarine" par defaut (data 0).
+         */
+        public short getIconData() {
+            return iconData;
         }
 
         public String getResistanceDisplay() {
@@ -154,9 +165,10 @@ public final class PillageConfig {
             if (icon == null) {
                 icon = Material.BARRIER;
             }
+            short iconData = (short) entry.getInt("icon-data", 0);
             String resistanceDisplay = entry.getString("resistance-display", "?");
             boolean insensible = entry.getBoolean("insensible", false);
-            managedByBelaCustoms.add(new ManagedByOtherPlugin(displayName, icon, resistanceDisplay, insensible));
+            managedByBelaCustoms.add(new ManagedByOtherPlugin(displayName, icon, iconData, resistanceDisplay, insensible));
         }
     }
 
