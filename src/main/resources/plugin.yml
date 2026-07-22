@@ -1,0 +1,35 @@
+name: Bela-Pillage
+version: 1.0.0
+main: fr.belarion.belapillage.BelaPillage
+author: Belarion
+description: >
+  Gere la durabilite des blocs premium face aux explosions pendant les pillages de
+  factions (Obsidienne, Enclume, Table d'Enchantement, ...), sans jamais modifier le
+  minage vanilla. Verification de la durabilite restante d'un bloc via une patate en
+  territoire ennemi. Respecte les blocs deja proteges par Bela-Customs.
+# "Factions" est le nom interne (plugin.yml -> name) de SaberFactions, comme dans
+# BelarionFactions : depend obligatoire, la verification via patate a besoin de
+# l'API territoriale (Board/FLocation) pour determiner le territoire ennemi.
+depend: [Factions]
+
+commands:
+  explosion:
+    description: Ouvre le GUI Bela-Pillage listant la resistance des blocs face aux explosions.
+    usage: /explosion
+    permission: belapillage.use
+  pillage:
+    description: Alias de /explosion, ouvre le meme GUI Bela-Pillage.
+    usage: /pillage
+    permission: belapillage.use
+  belapillage:
+    description: Commande admin de Bela-Pillage (reload de la configuration).
+    usage: /belapillage <reload>
+    permission: belapillage.admin
+
+permissions:
+  belapillage.use:
+    description: Autorise l'ouverture du GUI Bela-Pillage via /explosion ou /pillage, et l'usage de la patate de verification.
+    default: true
+  belapillage.admin:
+    description: Autorise le rechargement de la configuration de Bela-Pillage.
+    default: op
