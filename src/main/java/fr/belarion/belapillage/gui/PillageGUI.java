@@ -19,7 +19,7 @@ import java.util.List;
  * GUI premium (verres decoratifs, couleurs sobres, touches d'emeraude) affichant la
  * resistance aux explosions de tous les blocs concernes : ceux geres activement par
  * Bela-Pillage, et ceux deja geres par Bela-Customs (purement informatif, voir
- * config.yml -&gt; already-managed-by-bela-customs). Purement un affichage : aucun item
+ * config.yml -> already-managed-by-bela-customs). Purement un affichage : aucun item
  * de ce GUI n'est cliquable (voir {@link GUIListener}).
  */
 public final class PillageGUI {
@@ -28,8 +28,15 @@ public final class PillageGUI {
     private static final String TITLE = ChatColor.DARK_GRAY + "» " + ChatColor.DARK_GREEN
             + "" + ChatColor.BOLD + "Bela-Pillage" + ChatColor.RESET + ChatColor.DARK_GRAY + " «";
 
-    // Slots interieurs disponibles pour les items (bordure decorative tout autour).
-    private static final int[] CONTENT_SLOTS = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25};
+    // Slots interieurs disponibles pour les items de blocs (bordure decorative tout
+    // autour). Le slot 22 est volontairement exclu : il est reserve a la patate
+    // d'information, toujours centree sur la deuxieme rangee de contenu (voir
+    // POTATO_SLOT), quel que soit le nombre de blocs listes au-dessus.
+    private static final int[] CONTENT_SLOTS = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 23, 24, 25};
+
+    // Slot central de la deuxieme rangee de contenu (rangee 18-26, bordure sur 18 et
+    // 26) : place la patate d'information au centre visuel du GUI.
+    private static final int POTATO_SLOT = 22;
 
     private final BelaPillage plugin;
 
@@ -88,24 +95,22 @@ public final class PillageGUI {
         for (ProtectedBlockType type : sortedByName(plugin.getDurabilityManager().getRegisteredTypes())) {
             entries.add(buildBlockItem(
                     type.getMaterial(),
+                    (short) 0,
                     type.getDisplayName(),
                     type.getMaxDurability() + " explosions",
-                    false,
-                    "Bela-Pillage"
+                    false
             ));
         }
 
         for (PillageConfig.ManagedByOtherPlugin managed : config.getManagedByBelaCustoms()) {
             entries.add(buildBlockItem(
                     managed.getIcon(),
+                    managed.getIconData(),
                     managed.getDisplayName(),
                     managed.getResistanceDisplay(),
-                    managed.isInsensible(),
-                    "Bela-Customs"
+                    managed.isInsensible()
             ));
         }
-
-        entries.add(buildInfoItem());
 
         int slotIndex = 0;
         for (ItemStack entry : entries) {
@@ -115,6 +120,10 @@ public final class PillageGUI {
             }
             inventory.setItem(CONTENT_SLOTS[slotIndex++], entry);
         }
+
+        // La patate d'information est toujours affichee seule, centree, jamais melangee
+        // a la liste des blocs ci-dessus.
+        inventory.setItem(POTATO_SLOT, buildInfoItem());
     }
 
     private List<ProtectedBlockType> sortedByName(Iterable<ProtectedBlockType> types) {
@@ -124,8 +133,8 @@ public final class PillageGUI {
         return list;
     }
 
-    private ItemStack buildBlockItem(Material icon, String displayName, String resistanceDisplay, boolean insensible, String managedBy) {
-        ItemStack item = new ItemStack(icon);
+    private ItemStack buildBlockItem(Material icon, short iconData, String displayName, String resistanceDisplay, boolean insensible) {
+        ItemStack item = new ItemStack(icon, 1, iconData);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + displayName);
 
@@ -133,11 +142,7 @@ public final class PillageGUI {
                 ? ChatColor.DARK_GREEN + "✦ " + ChatColor.GREEN + "Insensible aux explosions" + ChatColor.DARK_GREEN + " ✦"
                 : ChatColor.GRAY + "Résistance : " + ChatColor.GREEN + resistanceDisplay;
 
-        meta.setLore(Arrays.asList(
-                resistanceLine,
-                "",
-                ChatColor.DARK_GRAY + "Géré par " + ChatColor.DARK_GREEN + managedBy
-        ));
+        meta.setLore(Arrays.asList(resistanceLine));
         item.setItemMeta(meta);
         return item;
     }
