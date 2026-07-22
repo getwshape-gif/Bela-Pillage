@@ -57,11 +57,6 @@ already-managed-by-bela-customs:
     icon: ENDER_CHEST
     resistance-display: "5 explosions"
     insensible: false
-  reinforced-emerald-block:
-    display-name: "Bloc d'Émeraude Renforcé"
-    icon: EMERALD_BLOCK
-    resistance-display: "Insensible aux explosions"
-    insensible: true
   emerald-enchant-table:
     display-name: "Table d'Enchantement en Émeraude"
     icon: PRISMARINE
