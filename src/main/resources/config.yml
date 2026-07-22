@@ -1,0 +1,102 @@
+# =====================================================
+# Bela-Pillage - config.yml
+# =====================================================
+#
+# Ce plugin ne gere la durabilite des blocs ci-dessous QUE face aux explosions
+# (TNT, Creeper, ou toute autre source cote serveur). Le minage vanilla n'est
+# JAMAIS modifie : un bloc listé ici reste cassable normalement a la pioche,
+# recuperable normalement, avec son comportement vanilla intact. La durabilite
+# n'intervient jamais lors du minage, uniquement lors d'une explosion.
+#
+# A chaque explosion touchant un bloc protege : durabilite -1. A 0, le bloc
+# casse et est lache naturellement au sol (drop Minecraft normal), exactement
+# comme une explosion vanilla non protegee l'aurait fait.
+
+# -----------------------------------------------------
+# Blocs geres activement par Bela-Pillage.
+# -----------------------------------------------------
+# Cle libre (identifiant interne) -> materiau Bukkit + nombre d'explosions
+# necessaires pour casser le bloc + nom d'affichage (potato-check et GUI).
+#
+# Pour ajouter un nouveau bloc protege a l'avenir : ajoute simplement une
+# nouvelle entree ici (meme structure), redemarre ou fais /belapillage reload.
+# Aucune modification de code n'est necessaire.
+#
+# ATTENTION : ne jamais ajouter ici un materiau deja utilise par Bela-Customs
+# pour un bloc premium existant (Material.ENDER_CHEST pour le Coffre en
+# Emeraude, Material.SEA_LANTERN pour l'Enclume Emeraude, Material.PRISMARINE
+# pour la Table d'Enchantement Emeraude) : Bela-Pillage detecte et ignore au
+# demarrage toute entree en conflit (voir PillageConfig), pour ne jamais
+# interferer avec le systeme de durabilite deja en place dans Bela-Customs.
+blocks:
+  obsidian:
+    material: OBSIDIAN
+    durability: 10
+    display-name: "Obsidienne"
+  anvil:
+    material: ANVIL
+    durability: 20
+    display-name: "Enclume"
+  enchantment-table:
+    material: ENCHANTMENT_TABLE
+    durability: 20
+    display-name: "Table d'Enchantement"
+
+# -----------------------------------------------------
+# Blocs deja geres par Bela-Customs (purement informatif).
+# -----------------------------------------------------
+# Bela-Pillage n'implemente STRICTEMENT AUCUNE logique pour ces blocs : ils
+# sont deja proteges par Bela-Customs (EmeraldChestListener et
+# BlockProtectionListener). Cette liste ne sert qu'a les afficher dans le GUI
+# /explosion et /pillage, pour donner une vue d'ensemble complete de toutes
+# les resistances aux explosions du serveur, sans jamais recouvrir ni
+# reecrire le fonctionnement existant de Bela-Customs.
+already-managed-by-bela-customs:
+  emerald-chest:
+    display-name: "Coffre en Émeraude"
+    icon: ENDER_CHEST
+    resistance-display: "5 explosions"
+    insensible: false
+  reinforced-emerald-block:
+    display-name: "Bloc d'Émeraude Renforcé"
+    icon: EMERALD_BLOCK
+    resistance-display: "Insensible aux explosions"
+    insensible: true
+  emerald-enchant-table:
+    display-name: "Table d'Enchantement en Émeraude"
+    icon: PRISMARINE
+    resistance-display: "Insensible aux explosions"
+    insensible: true
+  emerald-anvil:
+    display-name: "Enclume en Émeraude"
+    icon: SEA_LANTERN
+    resistance-display: "Insensible aux explosions"
+    insensible: true
+
+# -----------------------------------------------------
+# Verification de la durabilite via une patate.
+# -----------------------------------------------------
+potato-check:
+  # Le joueur doit tenir une patate normale (Material.POTATO_ITEM) en main.
+  enabled: true
+  # La verification ne fonctionne que sur un bloc situe en territoire ennemi
+  # (relation Factions ENEMY entre le joueur et la faction proprietaire du
+  # territoire). Passe a false pour l'autoriser partout (debug/tests).
+  require-enemy-territory: true
+  # Delai minimum (en millisecondes) entre deux messages envoyes au meme
+  # joueur, pour eviter le spam de chat en maintenant le clic gauche enfonce.
+  message-cooldown-ms: 500
+
+# -----------------------------------------------------
+# Persistance des donnees de durabilite.
+# -----------------------------------------------------
+storage:
+  # Intervalle (en secondes) entre deux sauvegardes automatiques asynchrones
+  # du fichier de durabilite. Une sauvegarde synchrone supplementaire a
+  # toujours lieu a l'extinction du plugin (onDisable), quel que soit ce
+  # reglage.
+  autosave-interval-seconds: 300
+
+# Active des messages de debug dans la console (evenements d'explosion traites,
+# chargement/sauvegarde du fichier de durabilite, etc.).
+debug: false
