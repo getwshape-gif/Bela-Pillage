@@ -65,6 +65,11 @@ already-managed-by-bela-customs:
   emerald-enchant-table:
     display-name: "Table d'Enchantement en Émeraude"
     icon: PRISMARINE
+    # Valeur de donnee (sous-id) legacy 1.8 du materiau PRISMARINE : 0 = prismarine
+    # normale (rough), 1 = briques de prismarine, 2 = prismarine sombre (dark). Le
+    # bloc reel gere par Bela-Customs utilise la texture sombre, donc 2 ici pour que
+    # l'icone du GUI corresponde exactement au bloc en jeu.
+    icon-data: 2
     resistance-display: "Insensible aux explosions"
     insensible: true
   emerald-anvil:
