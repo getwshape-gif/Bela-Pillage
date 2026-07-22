@@ -38,11 +38,10 @@ et `BlockProtectionListener`) et ne sont **jamais** touches par Bela-Pillage :
 | Bloc                                | Resistance (geree par Bela-Customs) |
 |--------------------------------------|----------------------------------------|
 | Coffre en Émeraude (Material.ENDER_CHEST) | 5 explosions                     |
-| Bloc d'Émeraude Renforcé              | Insensible aux explosions             |
 | Table d'Enchantement en Émeraude (Material.PRISMARINE, data 2) | Insensible aux explosions |
 | Enclume en Émeraude (Material.SEA_LANTERN) | Insensible aux explosions        |
 
-Ces quatre entrees sont affichees dans le GUI `/explosion` et `/pillage` a titre
+Ces trois entrees sont affichees dans le GUI `/explosion` et `/pillage` a titre
 purement informatif (`config.yml` -> `already-managed-by-bela-customs`), mais Bela-Pillage
 n'implemente **aucune** logique pour elles. La securite ne repose pas que sur la
 configuration : les materiaux `ENDER_CHEST`, `SEA_LANTERN` et `PRISMARINE` sont
@@ -56,10 +55,9 @@ Bela-Customs : les deux plugins ne se voient jamais mutuellement dans la liste d
 blocs d'une meme explosion (`blockList()`), quelle que soit la priorite d'ecoute des
 evenements.
 
-> Note historique : l'ancien "Bloc d'Émeraude Renforcé" posable a ete remplace dans
-> Bela-Customs par l'item "Émeraude Renforcée" (pure monnaie d'echange, non posable). Il
-> reste liste ici a titre informatif/historique dans le GUI, mais n'a plus de forme
-> posable dans la version actuelle de Bela-Customs.
+> Note historique : l'ancien "Bloc d'Émeraude Renforcé" posable a ete retire de
+> Bela-Customs (remplace par l'item "Émeraude Renforcée", pure monnaie d'echange, non
+> posable) et n'est donc plus liste dans le GUI Bela-Pillage.
 
 ## Verification de la durabilite avec une patate
 
